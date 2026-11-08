@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="pt-BR" class="h-full scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Felipinas | Hospedagens de Luxo & Experiências Únicas</title>
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome 6 Icons CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts: Playfair Display & Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#FDF7F5',
+                            100: '#FBF0EC',
+                            200: '#F5DDD3',
+                            500: '#E05638', /* Signature Terracotta / Coral */
+                            600: '#C84327',
+                            700: '#A3331C',
+                            dark: '#1C1917'
+                        },
+                        sand: {
+                            50: '#FAF8F5',  /* Soft Sand Background */
+                            100: '#F4EFEA',
+                            200: '#E8E1D9',
+                            300: '#D6CBC0',
+                            800: '#4A443F'
+                        },
+                        gold: {
+                            400: '#F3C06B',
+                            500: '#D4AF37', /* Champagne Gold */
+                            600: '#AA8820'
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        serif: ['"Playfair Display"', 'serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #FAF8F5;
+            color: #1C1917;
+        }
+
+        .brand-gradient {
+            background: linear-gradient(135deg, #E05638 0%, #C84327 100%);
+        }
+
+        .brand-glow {
+            box-shadow: 0 10px 30px -8px rgba(224, 86, 56, 0.4);
+        }
+
+        .gold-gradient {
+            background: linear-gradient(135deg, #D4AF37 0%, #AA8820 100%);
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.88);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
+        .custom-input {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .custom-input:focus {
+            border-color: #E05638;
+            box-shadow: 0 0 0 4px rgba(224, 86, 56, 0.12);
+            background-color: #FFFFFF;
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .screen-animate {
+            animation: fadeUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%) translateX(-50%); opacity: 0; }
+            to { transform: translateY(0) translateX(-50%); opacity: 1; }
+        }
+        .toast-animate {
+            animation: slideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="min-h-full flex flex-col justify-between relative overflow-x-hidden antialiased">
+
+    <!-- ================= HEADER FIXO COM MENU GLOBAL ================= -->
+    <header class="glass-panel border-b border-sand-200/80 sticky top-0 z-50 transition-all">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between gap-4">
+            
+            <!-- Logo Felipinas -->
+            <a href="#" onclick="navigateTo('screen-home')" class="flex items-center gap-2.5 group shrink-0">
+                <div class="w-10 h-10 rounded-2xl brand-gradient flex items-center justify-center text-white shadow-lg group-hover:scale-105 transition-transform duration-300">
+                    <i class="fa-solid fa-house-chimney text-lg"></i>
+                </div>
+                <div class="flex flex-col">
+                    <span class="text-2xl font-bold tracking-tight text-stone-900 leading-none">Felipinas<span class="text-brand-500">.</span></span>
+                    <span class="text-[9px] font-bold tracking-widest text-stone-400 uppercase mt-0.5">Hospedagens Únicas</span>
+                </div>
+            </a>
+
+            <!-- Menu Principal de Telas -->
+            <nav class="hidden md:flex items-center gap-1 bg-sand-100/80 p-1.5 rounded-full border border-sand-200 text-xs font-bold">
+                <button onclick="navigateTo('screen-home')" id="nav-home" class="px-4 py-2 rounded-full text-stone-700 hover:text-brand-500 transition">Início</button>
+                <button onclick="navigateTo('screen-listings')" id="nav-listings" class="px-4 py-2 rounded-full text-stone-700 hover:text-brand-500 transition">Catálogo</button>
+                <button onclick="navigateTo('screen-wishlist')" id="nav-wishlist" class="px-4 py-2 rounded-full text-stone-700 hover:text-brand-500 transition flex items-center gap-1.5">
+                    <span>Favoritos</span>
+                    <span id="navWishlistBadge" class="w-4 h-4 rounded-full bg-brand-500 text-white text-[9px] font-bold flex items-center justify-center">2</span>
+                </button>
+                <button onclick="navigateTo('screen-voucher')" id="nav-voucher" class="px-4 py-2 rounded-full text-stone-700 hover:text-brand-500 transition">Minhas Viagens</button>
+                <button onclick="navigateTo('screen-host')" id="nav-host" class="px-4 py-2 rounded-full text-brand-600 bg-brand-50 hover:bg-brand-100 transition border border-brand-200">
+                    <i class="fa-solid fa-plus-circle mr-1"></i>Anunciar Imóvel
+                </button>
+            </nav>
+
+            <!-- Ações Direitas: Moeda & Perfil -->
+            <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+                
+                <!-- Currency Selector -->
+                <div class="relative">
+                    <button id="currencyBtn" onclick="toggleCurrencyDropdown()" class="flex items-center gap-1.5 text-xs font-bold text-stone-700 bg-sand-100 hover:bg-sand-200/80 px-3.5 py-2 rounded-full border border-sand-200 transition">
+                        <i class="fa-solid fa-globe text-brand-500"></i>
+                        <span id="currentCurrLabel">BRL (R$)</span>
+                    </button>
+                    <div id="currencyDropdown" class="hidden absolute right-0 mt-2 w-36 bg-white rounded-2xl shadow-xl border border-sand-200 py-2 z-50">
+                        <button onclick="setCurrency('BRL (R$)', 1)" class="w-full text-left px-4 py-2 text-xs font-bold text-stone-700 hover:bg-brand-50 hover:text-brand-600 flex justify-between">
+                            <span>Real (R$)</span> <span class="text-stone-400">BRL</span>
+                        </button>
+                        <button onclick="setCurrency('USD ($)', 0.18)" class="w-full text-left px-4 py-2 text-xs font-bold text-stone-700 hover:bg-brand-50 hover:text-brand-600 flex justify-between">
+                            <span>Dólar ($)</span> <span class="text-stone-400">USD</span>
+                        </button>
+                        <button onclick="setCurrency('EUR (€)', 0.16)" class="w-full text-left px-4 py-2 text-xs font-bold text-stone-700 hover:bg-brand-50 hover:text-brand-600 flex justify-between">
+                            <span>Euro (€)</span> <span class="text-stone-400">EUR</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Profile / Auth Action -->
+                <div id="headerAuthArea">
+                    <!-- Renderizado Dinamicamente pelo JS -->
+                </div>
+
+            </div>
+        </div>
+    </header>
+
+    <!-- ================= CORPO PRINCIPAL COM AS TELAS ================= -->
+    <main class="flex-grow">
+
+        <!-- ================= 1. TELA DE LOGIN & CADASTRO ================= -->
+        <section id="screen-login" class="screen-animate max-w-4xl mx-auto px-4 py-10 sm:py-16">
+            <div class="bg-white rounded-3xl border border-sand-200 shadow-2xl overflow-hidden grid grid-cols-1 md:grid-cols-12">
+                <!-- Banner Lateral -->
+                <div class="md:col-span-5 bg-stone-900 text-white p-8 flex flex-col justify-between relative overflow-hidden hidden md:flex">
+                    <div class="absolute inset-0 opacity-40 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1566073771259-6a8506099945?auto=format&fit=crop&w=800&q=80');"></div>
+                    <div class="absolute inset-0 bg-gradient-to-t from-stone-950 via-stone-900/80 to-stone-900/40"></div>
+                    <div class="relative z-10">
+                        <span class="text-xs font-bold uppercase tracking-widest text-amber-300 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">Acesso VIP Felipinas</span>
+                        <h2 class="font-serif text-2xl font-bold mt-4 leading-tight">Sua jornada de luxo começa aqui.</h2>
+                    </div>
+                    <div class="relative z-10 text-xs text-stone-300 space-y-2">
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-500"></i> Reservas garantidas instantâneas</p>
+                        <p class="flex items-center gap-2"><i class="fa-solid fa-circle-check text-brand-500"></i> Suporte Concierge 24 Horas</p>
+                    </div>
+                </div>
+
+                <!-- Formulários de Auth -->
+                <div class="md:col-span-7 p-6 sm:p-10">
+                    <div class="flex bg-sand-100 p-1 rounded-xl mb-6 border border-sand-200">
+                        <button id="tabAuthLogin" onclick="switchAuthTab('login')" class="flex-1 py-2 rounded-lg text-xs font-bold bg-white text-stone-900 shadow-sm">Entrar</button>
+                        <button id="tabAuthReg" onclick="switchAuthTab('register')" class="flex-1 py-2 rounded-lg text-xs font-bold text-stone-500">Criar Conta</button>
+                    </div>
+
+                    <!-- Seleção de Perfil: Hóspede vs Anfitrião -->
+                    <div class="mb-6">
+                        <label class="block text-[10px] font-bold uppercase text-stone-500 mb-2">Tipo de Perfil</label>
+                        <div class="grid grid-cols-2 gap-2">
+                            <button type="button" id="roleGuest" onclick="selectRole('guest')" class="py-2 px-3 border-2 border-brand-500 bg-brand-50 text-brand-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5">
+                                <i class="fa-solid fa-suitcase"></i> Hóspede
+                            </button>
+                            <button type="button" id="roleHost" onclick="selectRole('host')" class="py-2 px-3 border border-sand-200 bg-white text-stone-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 hover:border-stone-400">
+                                <i class="fa-solid fa-key"></i> Anfitrião
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Form Login -->
+                    <form id="formLogin" onsubmit="handleLoginSubmit(event)" class="space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-stone-600 mb-1">E-mail</label>
+                            <input type="email" id="loginEmail" required value="felipe.silva@felipinas.com" class="custom-input w-full px-3.5 py-2.5 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-stone-600 mb-1">Senha</label>
+                            <input type="password" required value="senha123" class="custom-input w-full px-3.5 py-2.5 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl brand-gradient brand-glow text-white font-bold text-xs uppercase tracking-wider hover:opacity-95 transition">
+                            Entrar na Plataforma <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </form>
+
+                    <!-- Form Cadastro -->
+                    <form id="formRegister" onsubmit="handleRegisterSubmit(event)" class="hidden space-y-4">
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-stone-600 mb-1">Nome Completo</label>
+                            <input type="text" id="regName" required placeholder="Ex: Felipe Silva" class="custom-input w-full px-3.5 py-2.5 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold uppercase text-stone-600 mb-1">E-mail</label>
+                            <input type="email" id="regEmail" required placeholder="seu@email.com" class="custom-input w-full px-3.5 py-2.5 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <button type="submit" class="w-full py-3.5 rounded-xl brand-gradient brand-glow text-white font-bold text-xs uppercase tracking-wider hover:opacity-95 transition">
+                            Criar Conta <i class="fa-solid fa-user-plus ml-1"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 2. TELA INICIAL (HOMEPAGE) ================= -->
+        <section id="screen-home" class="hidden screen-animate max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <!-- Hero Banner -->
+            <div class="bg-stone-900 rounded-3xl p-6 sm:p-10 text-white mb-10 relative overflow-hidden border border-stone-800 shadow-2xl">
+                <div class="absolute inset-0 opacity-30 bg-cover bg-center" style="background-image: url('https://images.unsplash.com/photo-1540555700478-4be289fbecef?auto=format&fit=crop&w=1600&q=80');"></div>
+                <div class="absolute inset-0 bg-gradient-to-r from-stone-950 via-stone-900/90 to-transparent"></div>
+
+                <div class="relative z-10 max-w-2xl space-y-4">
+                    <span class="inline-flex items-center gap-2 bg-amber-400/10 border border-amber-400/30 px-3.5 py-1.5 rounded-full text-xs font-bold text-amber-300">
+                        <i class="fa-solid fa-crown text-amber-400"></i> Membro VIP Titanium
+                    </span>
+                    <h1 class="font-serif text-3xl sm:text-5xl font-bold leading-tight">Olá, <span id="homeUserTitle">Felipe Silva</span>!</h1>
+                    <p class="text-stone-300 text-xs sm:text-sm leading-relaxed">
+                        Curadoria exclusiva das melhores casas de praia, cabanas na serra e penthouses de luxo do Brasil.
+                    </p>
+                    <div class="pt-2">
+                        <button onclick="navigateTo('screen-listings')" class="px-6 py-3 rounded-xl brand-gradient text-white font-bold text-xs uppercase tracking-wider shadow-lg hover:opacity-95 transition flex items-center gap-2">
+                            <span>Explorar Catálogo Completo</span>
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Busca Rápida -->
+            <div class="bg-white p-4 rounded-2xl border border-sand-200 shadow-lg mb-8 grid grid-cols-1 sm:grid-cols-3 gap-3 items-center">
+                <div class="p-2.5 bg-sand-50 rounded-xl border border-sand-200">
+                    <label class="block text-[10px] font-bold uppercase text-stone-400">Destino</label>
+                    <input type="text" id="homeSearchInput" placeholder="Ex: Paraty, Gramado, Ipanema..." class="bg-transparent text-xs font-bold text-stone-800 w-full focus:outline-none">
+                </div>
+                <div class="p-2.5 bg-sand-50 rounded-xl border border-sand-200">
+                    <label class="block text-[10px] font-bold uppercase text-stone-400">Datas</label>
+                    <span class="text-xs font-bold text-stone-800 block">Próximo Fim de Semana</span>
+                </div>
+                <button onclick="searchFromHome()" class="py-3.5 rounded-xl brand-gradient text-white font-bold text-xs uppercase tracking-wider hover:opacity-95 transition flex items-center justify-center gap-2">
+                    <i class="fa-solid fa-magnifying-glass"></i> Buscar Agora
+                </button>
+            </div>
+
+            <!-- Grid de Destaques -->
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="text-xl font-bold text-stone-900">Acomodações em Destaque</h2>
+                <button onclick="navigateTo('screen-listings')" class="text-xs font-bold text-brand-500 hover:underline">Ver todas <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <div id="homeFeaturedGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= 3. TELA DE CATÁLOGO / BUSCA ================= -->
+        <section id="screen-listings" class="hidden screen-animate max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col md:flex-row items-md-center justify-between gap-4 mb-8">
+                <div>
+                    <h1 class="text-2xl font-bold text-stone-900">Catálogo Completo de Hospedagens</h1>
+                    <p class="text-xs text-stone-500 mt-0.5">Use os filtros em tempo real para encontrar sua estadia perfeita</p>
+                </div>
+
+                <!-- Input de Busca em Tempo Real -->
+                <div class="w-full md:w-80 relative">
+                    <span class="absolute inset-y-0 left-0 pl-3.5 flex items-center text-stone-400"><i class="fa-solid fa-magnifying-glass text-xs"></i></span>
+                    <input type="text" id="catalogSearchInput" onkeyup="renderListings()" placeholder="Filtrar por nome ou cidade..." class="custom-input w-full pl-9 pr-4 py-2.5 rounded-xl border border-sand-200 text-xs font-semibold text-stone-800 bg-white">
+                </div>
+            </div>
+
+            <!-- Filtros por Categoria -->
+            <div class="flex items-center gap-2 overflow-x-auto no-scrollbar pb-4 mb-6">
+                <button onclick="filterCatalogCategory('all', this)" class="cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-white font-bold text-xs shrink-0 shadow-sm">Todos</button>
+                <button onclick="filterCatalogCategory('praia', this)" class="cat-pill px-4 py-2 rounded-xl bg-white border border-sand-200 text-stone-700 font-bold text-xs shrink-0 hover:bg-sand-100">Frente à Praia</button>
+                <button onclick="filterCatalogCategory('cabana', this)" class="cat-pill px-4 py-2 rounded-xl bg-white border border-sand-200 text-stone-700 font-bold text-xs shrink-0 hover:bg-sand-100">Cabanas</button>
+                <button onclick="filterCatalogCategory('luxo', this)" class="cat-pill px-4 py-2 rounded-xl bg-white border border-sand-200 text-stone-700 font-bold text-xs shrink-0 hover:bg-sand-100">Coleção Luxo</button>
+                <button onclick="filterCatalogCategory('penthouse', this)" class="cat-pill px-4 py-2 rounded-xl bg-white border border-sand-200 text-stone-700 font-bold text-xs shrink-0 hover:bg-sand-100">Penthouses</button>
+            </div>
+
+            <!-- Grid do Catálogo -->
+            <div id="catalogGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= 4. TELA DE FAVORITOS ================= -->
+        <section id="screen-wishlist" class="hidden screen-animate max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="mb-8">
+                <h1 class="text-2xl font-bold text-stone-900 flex items-center gap-2">
+                    <i class="fa-solid fa-heart text-brand-500"></i> Meus Imóveis Favoritos
+                </h1>
+                <p class="text-xs text-stone-500 mt-1">Hospedagens salvas na sua conta para acesso rápido</p>
+            </div>
+
+            <div id="wishlistGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+
+        <!-- ================= 5. TELA DE DETALHES DA ACOMODAÇÃO ================= -->
+        <section id="screen-details" class="hidden screen-animate max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <button onclick="navigateTo('screen-listings')" class="inline-flex items-center gap-2 text-xs font-bold text-stone-700 hover:text-brand-500 mb-6 bg-white border border-sand-200 px-4 py-2 rounded-full shadow-sm transition">
+                <i class="fa-solid fa-arrow-left"></i> Voltar ao Catálogo
+            </button>
+
+            <div id="detailsContentContainer" class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Conteúdo Preenchido via JS -->
+            </div>
+        </section>
+
+        <!-- ================= 6. TELA DE CHECKOUT ================= -->
+        <section id="screen-checkout" class="hidden screen-animate max-w-4xl mx-auto px-4 sm:px-6 py-8">
+            <button onclick="navigateTo('screen-details')" class="inline-flex items-center gap-2 text-xs font-bold text-stone-700 hover:text-brand-500 mb-6 bg-white border border-sand-200 px-4 py-2 rounded-full shadow-sm transition">
+                <i class="fa-solid fa-arrow-left"></i> Voltar aos Detalhes
+            </button>
+
+            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-sand-200 shadow-2xl space-y-6">
+                <div>
+                    <span class="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-3 py-1 rounded-full uppercase">Sessão Autenticada</span>
+                    <h1 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-2">Confirmar Reserva e Pagamento</h1>
+                </div>
+
+                <!-- Resumo -->
+                <div id="checkoutSummary" class="bg-sand-50 p-4 rounded-2xl border border-sand-200"></div>
+
+                <!-- Métodos de Pagamento -->
+                <div class="space-y-3">
+                    <label class="block text-xs font-bold uppercase text-stone-700">Forma de Pagamento</label>
+                    <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                        <label class="border-2 border-brand-500 bg-brand-50/20 p-3 rounded-2xl flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="checkoutPay" checked class="accent-brand-500">
+                            <span class="text-xs font-bold text-stone-900"><i class="fa-brands fa-pix text-emerald-600 mr-1"></i> Pix (5% off)</span>
+                        </label>
+                        <label class="border border-sand-200 p-3 rounded-2xl flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="checkoutPay" class="accent-brand-500">
+                            <span class="text-xs font-bold text-stone-900"><i class="fa-regular fa-credit-card mr-1"></i> Cartão (12x)</span>
+                        </label>
+                        <label class="border border-sand-200 p-3 rounded-2xl flex items-center gap-2 cursor-pointer">
+                            <input type="radio" name="checkoutPay" class="accent-brand-500">
+                            <span class="text-xs font-bold text-stone-900"><i class="fa-solid fa-barcode mr-1"></i> Boleto</span>
+                        </label>
+                    </div>
+                </div>
+
+                <button onclick="confirmBookingPayment()" class="w-full py-4 rounded-xl brand-gradient brand-glow text-white font-bold text-xs uppercase tracking-wider hover:opacity-95 transition">
+                    Finalizar e Confirmar Reserva <i class="fa-solid fa-circle-check ml-1"></i>
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 7. TELA DE MINHAS VIAGENS & VOUCHER ================= -->
+        <section id="screen-voucher" class="hidden screen-animate max-w-3xl mx-auto px-4 py-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-sand-200 shadow-2xl space-y-6">
+                <div class="text-center space-y-2">
+                    <div class="w-14 h-14 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center text-2xl mx-auto">
+                        <i class="fa-solid fa-check"></i>
+                    </div>
+                    <span class="text-[10px] font-bold uppercase text-emerald-700 bg-emerald-50 px-3 py-1 rounded-full">Reserva Confirmada</span>
+                    <h1 class="font-serif text-2xl font-bold text-stone-900">Voucher Oficial da Sua Viagem</h1>
+                    <p class="text-xs text-stone-500">Código de Confirmação: <strong class="text-stone-900">#FL-88392</strong></p>
+                </div>
+
+                <!-- Passaporte Digital -->
+                <div class="bg-stone-900 text-white p-6 rounded-2xl space-y-4 text-center">
+                    <p class="text-[10px] font-bold uppercase tracking-widest text-amber-400">Chave Digital e Check-in</p>
+                    <div class="bg-white p-3 rounded-xl inline-block">
+                        <i class="fa-solid fa-qrcode text-7xl text-stone-900"></i>
+                    </div>
+                    <p class="text-xs font-mono">Código da Fechadura: <strong class="text-amber-400">8839#</strong></p>
+                </div>
+
+                <!-- Chat Simulado com Anfitrião -->
+                <div class="bg-sand-50 p-4 rounded-2xl border border-sand-200 space-y-3">
+                    <h4 class="text-xs font-bold text-stone-900 flex items-center gap-2">
+                        <i class="fa-solid fa-comments text-brand-500"></i> Chat Direto com Anfitrião
+                    </h4>
+                    <div id="chatMessages" class="bg-white p-3 rounded-xl h-32 overflow-y-auto text-xs space-y-2 border border-sand-200">
+                        <div class="bg-sand-100 p-2 rounded-lg max-w-[80%] text-stone-800">
+                            <strong>Anfitrião:</strong> Olá Felipe! Tudo pronto para sua recepção. Precisa de algo antes da chegada?
+                        </div>
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="chatInput" placeholder="Enviar mensagem ao anfitrião..." class="custom-input flex-grow px-3 py-2 rounded-xl border border-sand-200 text-xs">
+                        <button onclick="sendChatMessage()" class="px-4 py-2 brand-gradient text-white font-bold rounded-xl text-xs">Enviar</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================= 8. TELA DE PERFIL DO USUÁRIO ================= -->
+        <section id="screen-profile" class="hidden screen-animate max-w-4xl mx-auto px-4 py-8">
+            <div class="bg-white p-6 sm:p-8 rounded-3xl border border-sand-200 shadow-xl space-y-6">
+                <div class="flex items-center gap-4 pb-6 border-b border-sand-200">
+                    <div class="w-16 h-16 rounded-2xl brand-gradient text-white flex items-center justify-center font-bold text-xl shadow-lg">
+                        FS
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 id="profileName" class="text-2xl font-bold text-stone-900">Felipe Silva</h1>
+                            <span class="bg-amber-100 text-amber-800 text-[10px] font-bold px-2.5 py-0.5 rounded-full border border-amber-300">
+                                <i class="fa-solid fa-crown text-amber-500"></i> Titanium VIP
+                            </span>
+                        </div>
+                        <p id="profileEmail" class="text-xs text-stone-500">felipe.silva@felipinas.com</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
+                    <div class="p-4 bg-sand-50 rounded-2xl border border-sand-200 space-y-1">
+                        <span class="text-stone-400 font-bold uppercase text-[10px]">Viagens Realizadas</span>
+                        <p class="text-base font-bold text-stone-900">12 estadias concluídas</p>
+                    </div>
+                    <div class="p-4 bg-sand-50 rounded-2xl border border-sand-200 space-y-1">
+                        <span class="text-stone-400 font-bold uppercase text-[10px]">Método de Pagamento Salvo</span>
+                        <p class="text-base font-bold text-stone-900"><i class="fa-regular fa-credit-card mr-1"></i> Mastercard Black **** 8839</p>
+                    </div>
+                </div>
+
+                <button onclick="handleLogout()" class="px-5 py-2.5 rounded-xl bg-red-50 text-red-600 font-bold text-xs hover:bg-red-100 transition flex items-center gap-2">
+                    <i class="fa-solid fa-right-from-bracket"></i> Encerar Sessão
+                </button>
+            </div>
+        </section>
+
+        <!-- ================= 9. TELA DO ANFITRIÃO (CADASTRAR NOVO IMÓVEL) ================= -->
+        <section id="screen-host" class="hidden screen-animate max-w-3xl mx-auto px-4 py-8">
+            <div class="bg-white p-6 sm:p-10 rounded-3xl border border-sand-200 shadow-2xl space-y-6">
+                <div>
+                    <span class="bg-brand-50 text-brand-600 text-[10px] font-bold px-3 py-1 rounded-full uppercase border border-brand-100">Painel do Anfitrião</span>
+                    <h1 class="font-serif text-2xl sm:text-3xl font-bold text-stone-900 mt-2">Cadastrar Novo Imóvel no Catálogo</h1>
+                    <p class="text-xs text-stone-500 mt-1">Adicione sua propriedade para os hóspedes reservarem em tempo real</p>
+                </div>
+
+                <form onsubmit="handleAddNewProperty(event)" class="space-y-4">
+                    <div>
+                        <label class="block text-xs font-bold uppercase text-stone-700 mb-1">Título do Anúncio</label>
+                        <input type="text" id="hostTitle" required placeholder="Ex: Bangalô Exclusivo na Praia" class="custom-input w-full px-4 py-3 rounded-xl border border-sand-200 text-xs font-semibold">
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-stone-700 mb-1">Cidade e Estado</label>
+                            <input type="text" id="hostLocation" required placeholder="Ex: Búzios, Rio de Janeiro" class="custom-input w-full px-4 py-3 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-stone-700 mb-1">Categoria</label>
+                            <select id="hostCategory" class="custom-input w-full px-4 py-3 rounded-xl border border-sand-200 text-xs font-semibold bg-white">
+                                <option value="praia">Frente à Praia</option>
+                                <option value="cabana">Cabana</option>
+                                <option value="luxo">Coleção Luxo</option>
+                                <option value="penthouse">Penthouse</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-stone-700 mb-1">Preço por Noite (R$)</label>
+                            <input type="number" id="hostPrice" required placeholder="950" class="custom-input w-full px-4 py-3 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold uppercase text-stone-700 mb-1">URL da Imagem</label>
+                            <input type="url" id="hostImage" placeholder="https://..." class="custom-input w-full px-4 py-3 rounded-xl border border-sand-200 text-xs font-semibold">
+                        </div>
+                    </div>
+                    <button type="submit" class="w-full py-4 rounded-xl brand-gradient brand-glow text-white font-bold text-xs uppercase tracking-wider hover:opacity-95 transition">
+                        Publicar Imóvel no Catálogo <i class="fa-solid fa-plus-circle ml-1"></i>
+                    </button>
+                </form>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ================= FOOTER COMPARTILHADO ================= -->
+    <footer class="bg-stone-900 text-stone-400 text-xs border-t border-stone-800 py-8 mt-12">
+        <div class="max-w-7xl mx-auto px-4 text-center sm:flex sm:justify-between sm:text-left">
+            <p>© 2026 Felipinas Hospedagens S.A. Todos os direitos reservados.</p>
+            <p class="mt-2 sm:mt-0 text-stone-500">Plataforma desenvolvida para VS Code</p>
+        </div>
+    </footer>
+
+    <!-- ================= TOAST NOTIFICATION ================= -->
+    <div id="toast" class="hidden fixed bottom-6 left-1/2 -translate-x-1/2 z-50 bg-stone-900 text-white text-xs font-semibold px-5 py-3 rounded-full shadow-2xl border border-stone-700 flex items-center gap-2.5 toast-animate">
+        <i id="toastIcon" class="fa-solid fa-circle-check text-emerald-400"></i>
+        <span id="toastMsg">Notificação</span>
+    </div>
+
+    <!-- ================= JAVASCRIPT STATE MANAGEMENT & LOGIC ================= -->
+    <script>
+        // Database de Imóveis (Inicial)
+        let properties = [
+            {
+                id: 1,
+                title: "Villa Mirante do Oceano & Infinity Pool",
+                location: "Paraty, Rio de Janeiro",
+                category: "praia",
+                isSuperhost: true,
+                rating: 4.98,
+                reviewsCount: 124,
+                priceBRL: 850,
+                image: "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80",
+                beds: 4, baths: 3, guests: 8, host: "Helena Castro",
+                amenities: ["Piscina Infinita", "Frente ao Mar", "Wi-Fi 500MB", "Churrasqueira", "Ar-condicionado"]
+            },
+            {
+                id: 2,
+                title: "Cabana A-Frame de Luxo na Serra",
+                location: "Gramado, Rio Grande do Sul",
+                category: "cabana",
+                isSuperhost: true,
+                rating: 4.95,
+                reviewsCount: 88,
+                priceBRL: 620,
+                image: "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?auto=format&fit=crop&w=800&q=80",
+                beds: 2, baths: 2, guests: 4, host: "Ricardo Silveira",
+                amenities: ["Lareira", "Jacuzzi Externa", "Vista para Montanhas", "Adega de Vinhos"]
+            },
+            {
+                id: 3,
+                title: "Penthouse Duplex com Vista Panorâmica",
+                location: "Ipanema, Rio de Janeiro",
+                category: "penthouse",
+                isSuperhost: false,
+                rating: 4.89,
+                reviewsCount: 62,
+                priceBRL: 1400,
+                image: "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?auto=format&fit=crop&w=800&q=80",
+                beds: 3, baths: 3, guests: 6, host: "Beatriz Lima",
+                amenities: ["Rooftop Privativo", "Portaria 24h", "Academia", "Garagem Dupla"]
+            },
+            {
+                id: 4,
+                title: "Mansão & Vinhedo Privativo",
+                location: "Campos do Jordão, São Paulo",
+                category: "luxo",
+                isSuperhost: true,
+                rating: 4.99,
+                reviewsCount: 94,
+                priceBRL: 2100,
+                image: "https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=800&q=80",
+                beds: 5, baths: 5, guests: 10, host: "Fernando Albuquerque",
+                amenities: ["Quadra de Tênis", "Chef Particular", "Piscina Aquecida", "Lareira"]
+            }
+        ];
+
+        // Estado Global da Aplicação
+        let isLoggedIn = true;
+        let currentUser = { name: "Felipe Silva", email: "felipe.silva@felipinas.com", role: "guest" };
+        let wishlist = new Set([1, 4]);
+        let selectedProperty = properties[0];
+        let currentCurrency = 'BRL';
+        let currencyRates = { BRL: 1, USD: 0.18, EUR: 0.16 };
+        let currencySymbols = { BRL: 'R$', USD: '$', EUR: '€' };
+        let catalogCategory = 'all';
+
+        // Inicialização
+        document.addEventListener('DOMContentLoaded', () => {
+            renderHeaderAuth();
+            renderHomeFeatured();
+            renderListings();
+            renderWishlist();
+            updateWishlistBadge();
+        });
+
+        // Navegação entre Telas
+        function navigateTo(screenId) {
+            const screens = ['screen-login', 'screen-home', 'screen-listings', 'screen-wishlist', 'screen-details', 'screen-checkout', 'screen-voucher', 'screen-profile', 'screen-host'];
+            
+            screens.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) el.classList.add('hidden');
+
+                const navBtn = document.getElementById(`nav-${id.replace('screen-', '')}`);
+                if (navBtn) {
+                    navBtn.classList.remove('text-brand-500', 'bg-white', 'shadow-sm');
+                }
+            });
+
+            const active = document.getElementById(screenId);
+            if (active) active.classList.remove('hidden');
+
+            const activeBtn = document.getElementById(`nav-${screenId.replace('screen-', '')}`);
+            if (activeBtn) {
+                activeBtn.classList.add('text-brand-500');
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // Renderiza Header de Auth
+        function renderHeaderAuth() {
+            const area = document.getElementById('headerAuthArea');
+            if (isLoggedIn) {
+                area.innerHTML = `
+                    <button onclick="navigateTo('screen-profile')" class="flex items-center gap-2 border border-sand-200 hover:border-brand-500 bg-white p-1 pl-3 rounded-full shadow-sm transition">
+                        <span class="text-xs font-bold text-stone-800">${currentUser.name.split(' ')[0]}</span>
+                        <div class="w-7 h-7 rounded-full brand-gradient text-white flex items-center justify-center font-bold text-xs">
+                            ${currentUser.name.substring(0, 2).toUpperCase()}
+                        </div>
+                    </button>
+                `;
+            } else {
+                area.innerHTML = `
+                    <button onclick="navigateTo('screen-login')" class="flex items-center gap-2 border border-sand-200 hover:border-brand-500 bg-white px-4 py-2 rounded-full text-xs font-bold text-stone-800 shadow-sm transition">
+                        <i class="fa-solid fa-user-lock text-brand-500"></i>
+                        <span>Entrar</span>
+                    </button>
+                `;
+            }
+        }
+
+        // Renderiza Destaques na Home
+        function renderHomeFeatured() {
+            const container = document.getElementById('homeFeaturedGrid');
+            container.innerHTML = "";
+            properties.slice(0, 3).forEach(p => {
+                container.appendChild(createPropertyCard(p));
+            });
+        }
+
+        // Renderiza Catálogo Completo com Busca
+        function renderListings() {
+            const container = document.getElementById('catalogGrid');
+            container.innerHTML = "";
+
+            const query = document.getElementById('catalogSearchInput').value.toLowerCase();
+            let filtered = properties;
+
+            if (catalogCategory !== 'all') {
+                filtered = filtered.filter(p => p.category === catalogCategory);
+            }
+
+            if (query) {
+                filtered = filtered.filter(p => p.title.toLowerCase().includes(query) || p.location.toLowerCase().includes(query));
+            }
+
+            filtered.forEach(p => {
+                container.appendChild(createPropertyCard(p));
+            });
+        }
+
+        // Renderiza Favoritos
+        function renderWishlist() {
+            const container = document.getElementById('wishlistGrid');
+            container.innerHTML = "";
+
+            if (wishlist.size === 0) {
+                container.innerHTML = `<p class="text-stone-400 text-xs font-bold col-span-3">Nenhum imóvel favoritados ainda.</p>`;
+                return;
+            }
+
+            wishlist.forEach(id => {
+                const p = properties.find(item => item.id === id);
+                if (p) container.appendChild(createPropertyCard(p));
+            });
+        }
+
+        // Construtor de Card de Imóvel Reutilizável
+        function createPropertyCard(p) {
+            const isFav = wishlist.has(p.id);
+            const card = document.createElement('div');
+            card.className = "bg-white rounded-3xl overflow-hidden border border-sand-200 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col justify-between group";
+            card.innerHTML = `
+                <div class="relative cursor-pointer" onclick="openDetails(${p.id})">
+                    <img src="${p.image}" class="w-full h-56 object-cover group-hover:scale-105 transition duration-500">
+                    <button onclick="event.stopPropagation(); toggleWishlist(${p.id})" class="absolute top-3 right-3 w-8 h-8 rounded-full bg-white/80 backdrop-blur-md flex items-center justify-center text-stone-700 hover:text-brand-500">
+                        <i class="${isFav ? 'fa-solid fa-heart text-brand-500' : 'fa-regular fa-heart'} text-sm"></i>
+                    </button>
+                </div>
+                <div class="p-5 flex-grow flex flex-col justify-between space-y-3">
+                    <div>
+                        <div class="flex items-center justify-between text-xs text-stone-500 mb-1">
+                            <span>${p.location}</span>
+                            <span class="font-bold text-stone-900"><i class="fa-solid fa-star text-amber-400 mr-1"></i>${p.rating}</span>
+                        </div>
+                        <h3 onclick="openDetails(${p.id})" class="font-bold text-stone-900 text-sm group-hover:text-brand-500 transition cursor-pointer">${p.title}</h3>
+                    </div>
+                    <div class="pt-3 border-t border-sand-100 flex items-center justify-between">
+                        <span class="text-base font-bold text-stone-900">${formatPrice(p.priceBRL)} <span class="text-xs font-normal text-stone-500">/noite</span></span>
+                        <button onclick="openDetails(${p.id})" class="text-xs font-bold text-brand-500 hover:underline">Ver detalhes</button>
+                    </div>
+                </div>
+            `;
+            return card;
+        }
+
+        // Detalhes da Acomodação
+        function openDetails(id) {
+            selectedProperty = properties.find(p => p.id === id) || properties[0];
+            const container = document.getElementById('detailsContentContainer');
+            const p = selectedProperty;
+
+            container.innerHTML = `
+                <div class="lg:col-span-8 space-y-6">
+                    <div>
+                        <h1 class="font-serif text-3xl font-bold text-stone-900">${p.title}</h1>
+                        <p class="text-xs text-stone-500 mt-1"><i class="fa-solid fa-location-dot text-brand-500 mr-1"></i> ${p.location}</p>
+                    </div>
+                    <img src="${p.image}" class="w-full h-80 object-cover rounded-3xl border border-sand-200">
+                    <div class="bg-white p-6 rounded-3xl border border-sand-200 space-y-3">
+                        <h3 class="font-bold text-stone-900 text-xs uppercase tracking-wider">Comodidades</h3>
+                        <div class="grid grid-cols-2 gap-2 text-xs text-stone-700">
+                            ${p.amenities.map(a => `<div class="flex items-center gap-2"><i class="fa-solid fa-check text-emerald-600"></i> ${a}</div>`).join('')}
+                        </div>
+                    </div>
+                </div>
+                <div class="lg:col-span-4">
+                    <div class="bg-white p-6 rounded-3xl border border-sand-200 shadow-xl space-y-4 sticky top-24">
+                        <div class="flex items-baseline justify-between">
+                            <span class="text-2xl font-bold text-stone-900">${formatPrice(p.priceBRL)} <span class="text-xs font-normal text-stone-500">/noite</span></span>
+                        </div>
+                        <button onclick="proceedToCheckout()" class="w-full py-4 rounded-xl brand-gradient brand-glow text-white font-bold text-xs uppercase tracking-wider">
+                            Ir para Checkout <i class="fa-solid fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                </div>
+            `;
+
+            navigateTo('screen-details');
+        }
+
+        function proceedToCheckout() {
+            const summary = document.getElementById('checkoutSummary');
+            const p = selectedProperty;
+            summary.innerHTML = `
+                <div class="flex items-center gap-4">
+                    <img src="${p.image}" class="w-16 h-16 rounded-xl object-cover">
+                    <div>
+                        <h4 class="text-xs font-bold text-stone-900">${p.title}</h4>
+                        <p class="text-[10px] text-stone-500">${p.location}</p>
+                        <p class="text-xs font-bold text-brand-500 mt-1">Total: ${formatPrice(p.priceBRL * 3 + 120)}</p>
+                    </div>
+                </div>
+            `;
+            navigateTo('screen-checkout');
+        }
+
+        function confirmBookingPayment() {
+            showToast("Reserva concluída com sucesso!");
+            navigateTo('screen-voucher');
+        }
+
+        // Alternar Favoritos
+        function toggleWishlist(id) {
+            if (wishlist.has(id)) {
+                wishlist.delete(id);
+                showToast("Removido dos favoritos");
+            } else {
+                wishlist.add(id);
+                showToast("Adicionado aos favoritos!");
+            }
+            updateWishlistBadge();
+            renderHomeFeatured();
+            renderListings();
+            renderWishlist();
+        }
+
+        function updateWishlistBadge() {
+            document.getElementById('navWishlistBadge').textContent = wishlist.size;
+        }
+
+        // Cadastrar Imóvel (Anfitrião)
+        function handleAddNewProperty(e) {
+            e.preventDefault();
+            const title = document.getElementById('hostTitle').value;
+            const location = document.getElementById('hostLocation').value;
+            const category = document.getElementById('hostCategory').value;
+            const priceBRL = parseFloat(document.getElementById('hostPrice').value);
+            const image = document.getElementById('hostImage').value || "https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80";
+
+            const newProp = {
+                id: properties.length + 1,
+                title, location, category, priceBRL, image,
+                rating: 5.0, reviewsCount: 1, isSuperhost: true,
+                amenities: ["Novo Anúncio", "Wi-Fi", "Piscina"]
+            };
+
+            properties.unshift(newProp);
+            showToast("Imóvel publicado no catálogo!");
+            renderListings();
+            navigateTo('screen-listings');
+        }
+
+        // Filtros de Categoria no Catálogo
+        function filterCatalogCategory(cat, btn) {
+            document.querySelectorAll('.cat-pill').forEach(b => b.className = "cat-pill px-4 py-2 rounded-xl bg-white border border-sand-200 text-stone-700 font-bold text-xs shrink-0 hover:bg-sand-100");
+            btn.className = "cat-pill active px-4 py-2 rounded-xl bg-brand-500 text-white font-bold text-xs shrink-0 shadow-sm";
+            catalogCategory = cat;
+            renderListings();
+        }
+
+        function searchFromHome() {
+            const val = document.getElementById('homeSearchInput').value;
+            document.getElementById('catalogSearchInput').value = val;
+            renderListings();
+            navigateTo('screen-listings');
+        }
+
+        // Chat com Anfitrião
+        function sendChatMessage() {
+            const input = document.getElementById('chatInput');
+            const messages = document.getElementById('chatMessages');
+            if (!input.value.trim()) return;
+
+            const userMsg = document.createElement('div');
+            userMsg.className = "bg-brand-50 border border-brand-100 p-2 rounded-lg max-w-[80%] ml-auto text-stone-800 text-right";
+            userMsg.innerHTML = `<strong>Você:</strong> ${input.value}`;
+            messages.appendChild(userMsg);
+            input.value = "";
+            messages.scrollTop = messages.scrollHeight;
+
+            setTimeout(() => {
+                const hostMsg = document.createElement('div');
+                hostMsg.className = "bg-sand-100 p-2 rounded-lg max-w-[80%] text-stone-800";
+                hostMsg.innerHTML = `<strong>Anfitrião:</strong> Recebido! Te aguardo no horário do check-in.`;
+                messages.appendChild(hostMsg);
+                messages.scrollTop = messages.scrollHeight;
+            }, 1000);
+        }
+
+        // Autenticação Tabs & Roles
+        function switchAuthTab(tab) {
+            document.getElementById('formLogin').classList.toggle('hidden', tab !== 'login');
+            document.getElementById('formRegister').classList.toggle('hidden', tab !== 'register');
+        }
+
+        function selectRole(role) {
+            document.getElementById('roleGuest').className = role === 'guest' ? "py-2 px-3 border-2 border-brand-500 bg-brand-50 text-brand-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5" : "py-2 px-3 border border-sand-200 bg-white text-stone-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5";
+            document.getElementById('roleHost').className = role === 'host' ? "py-2 px-3 border-2 border-brand-500 bg-brand-50 text-brand-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5" : "py-2 px-3 border border-sand-200 bg-white text-stone-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5";
+        }
+
+        function handleLoginSubmit(e) {
+            e.preventDefault();
+            isLoggedIn = true;
+            renderHeaderAuth();
+            showToast("Login realizado com sucesso!");
+            navigateTo('screen-home');
+        }
+
+        function handleRegisterSubmit(e) {
+            e.preventDefault();
+            isLoggedIn = true;
+            renderHeaderAuth();
+            showToast("Conta criada com sucesso!");
+            navigateTo('screen-home');
+        }
+
+        function handleLogout() {
+            isLoggedIn = false;
+            renderHeaderAuth();
+            showToast("Você saiu da sua conta.");
+            navigateTo('screen-home');
+        }
+
+        // Moedas
+        function toggleCurrencyDropdown() {
+            document.getElementById('currencyDropdown').classList.toggle('hidden');
+        }
+
+        function setCurrency(curr, rate) {
+            currentCurrency = curr.split(' ')[0];
+            currencyRates[currentCurrency] = rate;
+            document.getElementById('currentCurrLabel').textContent = curr;
+            document.getElementById('currencyDropdown').classList.add('hidden');
+            renderHomeFeatured();
+            renderListings();
+            renderWishlist();
+            showToast(`Moeda alterada para ${curr}`);
+        }
+
+        function formatPrice(priceBRL) {
+            const rate = currencyRates[currentCurrency] || 1;
+            const symbol = currencySymbols[currentCurrency] || 'R$';
+            return `${symbol} ${Math.round(priceBRL * rate).toLocaleString('pt-BR')}`;
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2500);
+        }
+    </script>
+</body>
+</html>
